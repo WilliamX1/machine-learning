@@ -86,10 +86,83 @@ conda install -c intel scikit-learn
 
 ## follow guidance
 
+[Reference](https://scikit-learn.org/stable/getting_started.html)
+
+### Fitting and predicting: estimator basics
+estimators: built-in machine learning algorithms and models. ex. RandomForestClassifier
+```python
+clf = RandomForestClassifier(random_state=0)
+X = [[ 1,  2,  3],  # 2 samples, 3 features
+     [11, 12, 13]]
+y = [0, 1]  # classes of each sample
+clf.fit(X, y)
+```
+
+### Transformers and pre-processors
+transforms or imputes the data
+```python
+X = [[0, 15], [1, -10]]
+print(StandardScaler().fit(X).transform(X))
+```
+
+### Pipelines: chaining pre-processors and estimators
+transformers and estimators combined together -> Pipeline
+```python
+# create a pipeline object
+pipe = make_pipeline(
+    StandardScaler(),
+    LogisticRegression()
+)
+
+# load the iris dataset and split it into train and test sets
+X, y = load_iris(return_X_y=True)
+X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0)
+
+# fit the whole pipeline
+pipe.fit(X_train, y_train)
 
 
+# we can now use it like any other estimator
+accuracy_score(pipe.predict(X_test), y_test)
+```
 
+### Model evaluation
+cross_validator: perform a 5-fold cross-validation procedure
+```python
+X, y = make_regression(n_samples=1000, random_state=0)
+lr = LinearRegression()
 
+result = cross_validate(lr, X, y)  # defaults to 5-fold CV
+result['test_score']  # r_squared score is high because dataset is easy
+```
+
+### Automatic parameter searches
+the best parameter combinations via cross-validation
+```python
+X, y = fetch_california_housing(return_X_y=True)
+X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0)
+
+# define the parameter space that will be searched over
+param_distributions = {'n_estimators': randint(1, 5),
+                       'max_depth': randint(5, 10)}
+
+# now create a searchCV object and fit it to the data
+search = RandomizedSearchCV(estimator=RandomForestRegressor(random_state=0),
+                            n_iter=5,
+                            param_distributions=param_distributions,
+                            random_state=0)
+search.fit(X_train, y_train)
+
+search.best_params_
+
+# the search object now acts like a normal random forest estimator
+# with max_depth=9 and n_estimators=4
+search.score(X_test, y_test)
+```
+
+## follow user guide
+
+[Reference](https://scikit-learn.org/stable/user_guide.html#user-guide)
 
 
 
