@@ -22,11 +22,11 @@ Gain(D, a) = Ent(D) - \sum_{v = 1}^{V}\frac{|D^v|}{|D|}Ent(D^v)
 $$
 
 $$
-Gain(D, A_1) = (log_2{3} - \frac{2}{3}) - (\frac{1}{3} + \frac{1}{3}\times(\frac{1}{2}\times log_2\frac{1}{2} + \frac{1}{2}\times log_2\frac{1}{2}) + \frac{1}{3}\times(\frac{1}{2}\times log_2\frac{1}{2} + \frac{1}{2}\times log_2\frac{1}{2})) = log_2{3} - \frac{1}{3}
+Gain(D, A_1) = (log_2{3} - \frac{2}{3}) + (0 + \frac{1}{3}\times(\frac{1}{2}\times log_2\frac{1}{2} + \frac{1}{2}\times log_2\frac{1}{2}) + \frac{1}{3}\times(\frac{1}{2}\times log_2\frac{1}{2} + \frac{1}{2}\times log_2\frac{1}{2})) = log_2{3} - \frac{1}{3}
 $$
 
 $$
-Gain(D, A_2) = (log_2{3} - \frac{2}{3}) - (\frac{1}{6} + \frac{2}{6}\times(\frac{1}{2}\times log_2\frac{1}{2} + \frac{1}{2}\times log_2\frac{1}{2}) + \frac{3}{6}) = log_2{3} - 1
+Gain(D, A_2) = (log_2{3} - \frac{2}{3}) + (0 + \frac{2}{6}\times(\frac{1}{2}\times log_2\frac{1}{2} + \frac{1}{2}\times log_2\frac{1}{2}) + 0) = log_2{3} - 1
 $$
 
 $$
