@@ -21,11 +21,16 @@ idx = zeros(size(X,1), 1);
 % Note: You can use a for-loop over the examples to compute this.
 %
 
-
-
-
-
-
+for i = 1 : length(idx)
+    min = 100000000;
+    for j = 1 : K
+        cal = sum((X(i, :) - centroids(j, :)).^2);
+        if cal < min
+            min = cal;
+            idx(i) = j;
+        end
+    end
+end
 
 % =============================================================
 

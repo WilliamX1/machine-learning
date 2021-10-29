@@ -22,15 +22,15 @@ Gain(D, a) = Ent(D) - \sum_{v = 1}^{V}\frac{|D^v|}{|D|}Ent(D^v)
 $$
 
 $$
-Gain(D, A_1) = (log_2{3} - \frac{2}{3}) + (0 + \frac{1}{3}\times(\frac{1}{2}\times log_2\frac{1}{2} + \frac{1}{2}\times log_2\frac{1}{2}) + \frac{1}{3}\times(\frac{1}{2}\times log_2\frac{1}{2} + \frac{1}{2}\times log_2\frac{1}{2})) = log_2{3} - \frac{1}{3}
+Gain(D, A_1) = (log_2{3} - \frac{2}{3}) - (0 - \frac{1}{3}\times(\frac{1}{2}\times log_2\frac{1}{2} + \frac{1}{2}\times log_2\frac{1}{2}) - \frac{1}{3}\times(\frac{1}{2}\times log_2\frac{1}{2} + \frac{1}{2}\times log_2\frac{1}{2})) = log_2{3} - \frac{4}{3}
 $$
 
 $$
-Gain(D, A_2) = (log_2{3} - \frac{2}{3}) + (0 + \frac{2}{6}\times(\frac{1}{2}\times log_2\frac{1}{2} + \frac{1}{2}\times log_2\frac{1}{2}) + 0) = log_2{3} - 1
+Gain(D, A_2) = (log_2{3} - \frac{2}{3}) - (0 - \frac{2}{6}\times(\frac{1}{2}\times log_2\frac{1}{2} + \frac{1}{2}\times log_2\frac{1}{2}) - 0) = log_2{3} - 1
 $$
 
 $$
-Gain(D, A_2) \lt Gain(D, A_1)
+Gain(D, A_2) \gt Gain(D, A_1)
 $$
 
 So choose $A_2$.
@@ -83,7 +83,7 @@ So Naive Bayes algorithm will predict _Y_ for it.
 3. Logistic Regression
 4. KNN
 
-Logistic Regression. Because logistic regression is only for convex function, which is not suitable for the following data.
+Logistic Regression. Because logistic regression is only for convex function and cannot handle with linear inseparable functions, which is not suitable for the following data.
 
 ### 2. You have trained a logistic classifier $y = sigmoid(w_0 + w_1x_1 + w_2x_2)$. Suppose $w_0 = 6$, $w_1 = -1$, and $w_2 = 0$. Which of the following figures represents the decision boundary found by your classifier?
 $$
@@ -93,6 +93,6 @@ $$
 So choose **A**.
 
 ### 3. Suppose we are given a dataset $D = \{(x^{(1)}, r^{(1)}), ..., (x^{(N)}, r^{(N)})\}$ and aim to learn some patterns using the following algorithms. Match the update rule for each algorithm.
-A - 2
+A - 3
 B - 3
-C - 1
+C - 3
