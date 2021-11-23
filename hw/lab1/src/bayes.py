@@ -47,7 +47,7 @@ def bayes_classify():
     Y_pred = nb.predict(X_test)
 
     # announce result
-    test_size = X_test.size
+    test_size = len(X_test)
     mispred_size = (Y_test != Y_pred).sum()
     correct_rate = 1 - mispred_size / test_size
     print("INFO: Number of mislabeled points out of a total %d points : %d, with correct rate %f"
