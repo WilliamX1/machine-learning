@@ -5,9 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="43cf266e-03d1-42c8-8c4b-ec389e044110" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../../519021910861_lab1.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../ex1-ex8-matlab/ex3/ex3data1.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../ex1-ex8-matlab/ex4/ex4data1.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../ex1-ex8-matlab/ex7/ex7.mlx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../ex1-ex8-matlab/ex7/ex7faces.mat" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bayes.py" beforeDir="false" afterPath="$PROJECT_DIR$/bayes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/X_test.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/X_train.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../slides/CSE-10-crash.pptx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../slides/ch1_intro.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../slides/ch2_linear-regression_upload.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../slides/ch3_decision tree.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../slides/ch4_bayes.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../slides/ch6_logistic_regr.pdf" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

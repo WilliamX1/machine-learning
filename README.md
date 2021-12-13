@@ -2,7 +2,7 @@
 
 ## 线性回归 Linear Regression
 
-### 概念
+### <id=1>概念</id>
 线性回归就是学习到一个数据属性线性组合的函数来进行未来的预测。
 
 ### 基本形式
@@ -82,6 +82,8 @@ $$
 https://zhuanlan.zhihu.com/p/45023349
 https://blog.csdn.net/weixin_42546496/article/details/88115095
 
+------
+
 ## 决策树
 ### 基本策略
 一颗决策树包含一个根结点、若干个内部结点和若干个叶结点。叶结点对应于决策结果，其他每个结点则对应于一个属性测试。每个结点包含的样本集合根据属性测试的结果被划分到子节点中。根节点包含样本全集。采用 _分而治之_ 策略。
@@ -112,7 +114,7 @@ $$
 $$
 Gini(D) = 1 - \sum_{k = 1}^{|\gamma|}p_k^2
 $$
-### 剪枝 - Pruning
+### 剪枝 Pruning
 解决_过拟合_的主要手段。
 
 * 预剪枝 - Prepruning
@@ -131,7 +133,193 @@ _训练开销时间_极大。
 * 缺失值处理
 让样本以不同的概率划入到不同的子节点中。即在信息熵增益时乘以参与计算的数据的概率。
 
+------
+
+## 贝叶斯分类
+### 贝叶斯定理 Bayes Rule
+$$
+P(c | \pmb{x}) = \frac{P(c) P(\pmb{x} | c)}{P(\pmb{x})}
+$$
+
+$P(c)$ 是类“先验”概率。
+
+$P(\pmb{x} | c)$ 是样本 $\pmb{x}$ 相对类标记 $c$ 的类条件概率，或称为似然概率。
+
+$P(\pmb{x})$ 是用于归一化的“证据”因子。
+
+### 极大似然估计 Maximum Likelihood Estimation
+
+$D_c$ 表示训练集 D 中第 c 类样本组成的集合，假设这些样本是独立同分布的，则参数 $\theta_{c}$ 对于数据集 $D_c$ 的似然是
+$$
+P(D_c | \theta_{c}) = \prod_{x \in D_c} P(x | \theta_{c})
+$$
+对 $\theta_{c}$ 进行极大似然估计，就是寻找最大化似然 $P(D_c | \theta_{c})$ 的参数值 $\hat\theta_{c}$.
+
+对数似然：解决（普通）似然的连乘操作容易造成下溢的问题。
+$$
+\begin{aligned}
+LL(\theta_{c}) &= log P(D_c | \theta_{c}) \\
+&= \sum_{x \in D_c}log P(x | \theta_{c}) \\
+\end{aligned}
+$$
+
+此时参数 $\theta_{c}$ 的极大似然估计 $\hat\theta_{c}$ 是
+$$
+\hat\theta_{c} = arg max LL(\theta_{c})
+$$
+
+连续属性情况下，假设概率密度符合**正态分布**函数，则参数 $\mu_{c}$ 和 $\sigma_{c}^{2}$ 的极大似然估计是
+$$
+\begin{aligned}
+\hat\mu_{c} &= \frac{1}{|D_c|}\sum_{x \in D_c}x \\
+\hat\sigma_c^2 &= \frac{1}{|D_c|}\sum_{x \in D_c}(x - \hat\mu_c)(x - \hat\mu_c)^T
+\end{aligned}
+$$
+
+### 朴素贝叶斯分类器
+采用“属性条件独立性假设”：对已知类别，假设所有属性相互独立。
+
+$$
+P(c | x) = \frac{P(c) P(x | c)}{P(x)} = \frac{P(c)}{P(x)}\prod^d_{i=1}P(x_i | c)
+$$
+
+拉普拉斯平滑 Laplacian correction：避免其他属性携带的信息被训练集中未出现的属性值“抹去”。
+$$
+\begin{aligned}
+\hat P(c) &= \frac{|D_c| + 1}{|D| + N} \\
+\hat P(x_i | c) &= \frac{|D_{c, x_i}| + 1}{|D_c| + N_i}
+\end{aligned}
+$$
+
+优点
+1. 训练快，可以采用“懒惰学习”方式不进行任何预训练。
+2. 在属性相互独立和多分类问题中效果好。
+3. 可维护性高，即训练集的增删更新对性能影响小。
+
+缺点
+1. 属性相互独立前提难以满足。
+2. 容易欠拟合
+
+------
+
+## K 近邻算法 KNN
+给定测试样本，基于某种距离度量找出训练集中与其最靠近的 k 个训练样本，然后基于这 k 个邻居的信息来进行预测。通常，在分类任务中采用“投票法”，在回归任务中采用“平均法”。
+
+### 步骤
+1. 选定 K。
+2. 计算测试点与其他所有样本点之间的“距离”。
+3. 对距离排序并选出距离最小的 K 个邻居。
+4. 收集最近邻的类别 Y。
+5. 运用“投票法”或“平均法”得出分类/回归的结果。
+
+### 说明
+
+* 参数 K
+K 越大分类边界越平滑。
+
+* 距离 Distance
+两个数据点相似性的度量，越相似则距离越大，且总是投影在 [0, 1] 之间。
+常用距离函数：
+1. 欧几里得距离 Euclidean Distance
+在高纬表现不好。
+$$
+dist = \sqrt{\sum^p_{k=1}(a_k - b_k)^2}
+$$
+2. 曼哈顿距离 Manhattan Distance
+$$
+dist = \sum^n_{k = 1}|a_k - b_k|
+$$
+3. 名夫斯基距离 Minkowski Distance
+$$
+dist = (\sum^n_{k = 1}|x_k - y_k|^p)^{\frac{1}{p}}
+$$
+4. 余弦相似性 Cosine Similarity
+$$
+\begin{aligned}
+cos(a, b) &= \frac{a \cdot b}{|a| \times |b|} \\
+&= \frac{\sum^n_{k = 1}a_k \times b_k}{\sqrt{\sum^n_{k = 1}a_k^2} \times \sqrt{\sum^n_{k = 1}b_k^2}}
+\end{aligned}
+$$
 
 
+* 正则化
+1. Z-score Scaling
+$$
+X_{norm} = \frac{x - \mu}{\sigma}
+$$
+2. Min-Max Scaling
+$$
+X_{norm} = \frac{x - x_{min}}{x_{max} - x_{min}}
+$$
 
+* 优点
+1. 无需训练。新数据对模型精确性无影响。
+2. 容易实现，仅有 K 和 距离函数 两个参数。
+
+* 缺点
+1. 大数据集上表现不好，且计算距离消耗时间太多，性能下降。
+2. 特征缩放（Feature Scaling）是必须的，不然可能得到错误结果。
+
+------
+
+## 逻辑回归（对数几率回归）logistics regression
+### 概念
+
+* 对数几率函数
+
+$$
+y = \frac{1}{1 + e^{-z}} \\
+z = \vec{w}^T\vec{x} + b
+$$
+
+* 几率
+转换得到 $\frac{y}{1 - y}$ 称为几率（odds），$ln(\frac{y}{1 - y})$ 即为对数几率（logit）。
+
+$$
+ln(\frac{y}{1 - y}) = \vec{w}^T\vec{x} + b
+$$
+
+* 损失函数
+
+$$
+l(\vec{w}, w_0|x,r) = -rlogy - (1 - r)log(1 - y)
+$$
+
+### 训练
+Goal:
+$$
+min_w \ L(\vec{w})
+$$
+
+Iteration:
+$$
+\begin{aligned}
+\vec{w}_{t+1} &= \vec{w}_t - \eta_t\frac{\partial L}{\partial w} \\
+\frac{\partial{L}}{\partial{w_j}} &= -\sum_{l}(\frac{\partial L}{\partial y^{(l)}} \frac{\partial y^{(l)}}{\partial a^{(l)}} \frac{\partial a^{(l)}}{\partial w_j}) \\
+\end{aligned}
+$$
+
+梯度下降学习
+$$
+\begin{aligned}
+y &= \frac{1}{1 + e^{-a}} \\
+\frac{\partial y}{\partial a} &= y \times (1 - y) \\
+\\
+a &= w^Tx + w_0 \\
+\frac{\partial a}{\partial w_j} &= x_j \\
+\\
+L(w, w_0 | D) &= -\sum^N_{l = 1}r^{(l)}logy^{(l)} + (1 - r^{(l)})log(1 - y^{(l)}) \\
+\frac{\partial{L}}{\partial{w_j}} &= -\sum_l(\frac{r^{(l)}}{y^{(l)}} - \frac{1 - r^{(l)}}{1 - y^{(l)}})\frac{\partial y^{(l)}}{\partial a^{(l)}} \frac{\partial a^{(l)}}{\partial w_j} \\
+&= -\sum_l(\frac{r^{(l)}}{y^{(l)}} - \frac{1 - r^{(l)}}{1 - y^{(l)}}) y^{(l)}(1 - y^{(l)}) \frac{\partial a^{(l)}}{\partial w_j} \ \ (if \ y = sigmoid(a)) \\
+&= -\sum_l(r^{(l)} - y^{(l)}) x_j^{(l)} = -\sum_l error \times input \\
+\frac{\partial L}{\partial w_0} &= -\sum_l(r^{(l)} - y^{(l)})
+\end{aligned}
+$$
+
+Softmax Function
+$$
+y_i = \hat{P}(C_i | x) = \frac{e^{w_i^Tx + w_{i0}}}{\sum^K_{j = 1}e^{w_j^Tx + w_{j0}}} \ \ i = 1, \dots, K
+$$
+
+------
 
