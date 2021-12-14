@@ -323,3 +323,184 @@ $$
 
 ------
 
+## 支持向量机 Support Vector Machine
+在高维或无限维空间中构造超平面或超平面集合，使得分类边界距离最近的数据点越远越好，从而缩小分类器的泛化误差。
+
+### 线性 SVM
+考虑以下形式点集：
+$$
+(\vec{x_1}, y_1), \dots, (\vec{x_n}, y_n)
+$$
+其中 $y_i$ 是 1 或者 -1，表明点 $\vec{x_i}$ 所属的类别。$\vec{x_i}$ 中每个都是一个 $p$ 维实向量。
+需要寻找一个能将 $y_i = 1$ 的点集与 $y_i = -1$ 的点集分开的“最大间隔超平面”，使得超平面与最近的点 $\vec{x_i}$ 之间的距离最大化。
+任何超平面可以写作：
+$$
+\vec{w} \cdot \vec{x} - b = 0
+$$
+其中 $\vec{w}$ 是法向量。参数 $\frac{b}{||\vec{w}||}$ 决定从原点沿法向量 $\vec{w}$ 到超平面的偏移量。
+
+**硬间隔**
+如果训练数据线性可分，选择分离两类数据的两个平行超平面，使得它们之间的距离尽可能大，在这两个超平面范围内的区域称为“间隔”，最大间隔超平面即使位于它们正中间的超平面，可以由方程：
+$$
+\vec{w} \cdot \vec{x} - b = 1
+$$
+或：
+$$
+\vec{w} \cdot \vec{x} - b = -1
+$$
+来表示。
+即我们的优化目标可以写成：
+$$
+\begin{aligned}
+&\underset{\vec{w}, b}{min} \quad \frac{1}{2}||\vec{w}||^2 \\
+&s.t. \quad y_i(\vec{w}^T\vec{x_i} + b) \geq 1, \quad i = 1, 2, \dots, m.
+\end{aligned}
+$$
+
+**软间隔**
+将 SVM 拓展到数据线性不可分的情况，引入铰链损失函数，从而优化目标为：
+$$
+\underset{\vec{w}, b}{min} \quad \frac{1}{2}||\vec{w}||^2 + C\sum^m_{i = 1}L(y_i(\vec{w}^T\vec{x_i} + b) - 1)
+$$
+
+其中 L 是损失函数
+
+* 0/1 损失函数
+$$
+l_{0/1}(z) = 
+\begin{cases}
+1, &if \ z \lt 0 \\
+0, &otherwise \\
+\end{cases}
+$$
+
+* hinge 损失函数
+$$
+L_{hinge}(z) = max(0, 1 - z)
+$$
+
+* 指数损失函数
+$$
+l_{exp}(z) = e^{-z}
+$$
+
+* 对率损失函数
+$$
+l_{log}(z) = log(1 + e^{-z})
+$$
+
+### 非线性分类
+通过将**核技巧**应用于最大边界超平面来创建非线性分类器，即算法形式上类似但把**点积**换成了**非线性核函数**，将数据变换成高维空间的线性可分的。
+
+核函数选择是支持向量机的最大变数，若核函数选择不合适，则意味着将样本映射到了一个不合适的特征空间，可能导致性能不佳。
+
+常见核函数：
+
+* 线性核
+$$
+\kappa(\vec{x_i}, \vec{x_j}) = \vec{x_i}^T\vec{x_j}
+$$
+
+* 多项式核
+$$
+\kappa(\vec{x_i}, \vec{x_j}) = (\vec{x_i}^T\vec{x_j})^d
+$$
+
+* 高斯核
+$$
+\kappa(\vec{x_i}, \vec{x_j}) = e^{(-\frac{||\vec{x_i} - \vec{x_j}||^2}{2\sigma^2})}
+$$
+
+* 拉普拉斯核
+$$
+\kappa(\vec{x_i}, \vec{x_j}) = e^{(-\frac{||\vec{x_i} - \vec{x_j}||^2}{\sigma})}
+$$
+
+* Sigmoid 核
+$$
+\kappa(\vec{x_i}, \vec{x_j}) = tanh(\beta\vec{x_i}^T\vec{x_j} + \theta)
+$$
+
+核函数性质：
+1. 若 $\kappa_1$ 和 $\kappa_2$ 为核函数，则对于任意整数 $\gamma_1$、$\gamma_2$ ，其线性组合：$\gamma_1\kappa_1 + \gamma_2\kappa_2$ 也是核函数。
+2. 若 $\kappa_1$ 和 $\kappa_2$ 为核函数，则对于核函数的直积：$\kappa_1\bigotimes\kappa_2(\vec{x}, \vec{z}) = \kappa_1(\vec{x}, \vec{z})\kappa_2(\vec{x}, \vec{z})$ 也是核函数。
+3. 若 $\kappa_1$ 为核函数，则对于任意函数 $g(\vec{x})$：$\kappa(\vec{x}, \vec{z}) = g(\vec{x})\kappa_1(\vec{x}, \vec{z})g(\vec{z})$ 也是核函数。
+
+### 计算与延伸
+将其转换成对偶问题，其本身就是一个凸二次规划问题，能够直接用现成的优化计算包求解。还可以使用SMO、次梯度下降、坐标下降等现代方法求解。
+
+SVM 潜在缺点：
+* 需要对输入数据进行完全标记
+* 未校准类成员概率
+* SVM 仅直接适用于二分类。
+* 模型参数很难理解，可解释性较差。
+
+------
+
+## 多层感知机 Multilayer Perceptron
+一种前向结构的人工神经网路，映射一组输入向量到一组输出向量。MLP 可以看做一个有向图，由多个节点层组成，每一层都**全连接**到下一层。
+
+### 激活函数
+对神经元接收到的总输入值进行处理以产生神经元的输出，理想中的激活函数是 0-1 函数，即“1”对应于神经元兴奋，“0”对应于神经元抑制。但为了使用反向传播算法，激活函数必须为可微函数。
+
+常见激活函数：
+1. 阶跃函数
+$$
+sgn(x) = 
+\begin{cases}
+1, &\quad x \geq 0. \\
+0, &\quad x \lt 0.
+\end{cases}
+$$
+2. Sigmoid 函数
+$$
+sigmoid(x) = \frac{1}{1 + e^{(-x)}}
+$$
+3. 双曲正切函数
+$$
+tanh(x) = \frac{1 - e^{-2x}}{1 + e^{-2x}}
+$$
+4. ReLU 函数
+$$
+ReLU(x) = max(0, x)
+$$
+5. Leaky ReLU 函数
+$$
+ReLU_{leaky}(x) = max(0.1x, x)
+$$
+6. Maxout 函数
+$$
+Maxout(x) = max(\vec{w_1}^Tx + b_1,\vec{w_2}^Tx + b_2)
+$$
+7. ELU 函数
+$$
+ELU(x) = 
+\begin{cases}
+x &\quad x \geq 0 \\
+\alpha(e^x - 1) &\quad x \lt 0
+\end{cases}
+$$
+
+### 训练
+不断重复以下步骤直至收敛。
+
+1. 正向传播
+将输入向量应用到神经网络中，并更新所有层（隐藏层和输出层）的神经元的激活函数。
+$$
+\begin{aligned}
+a_j &= \sum_i w_{ji}z_i \\
+z_j &= \sigma(a_j) \\
+\end{aligned}
+$$
+2. 反向传播
+根据权重和损失函数导数来更新各神经元误差。
+$$
+\delta^L_j= \frac{\partial l}{\partial a_j^L}
+$$
+3. 更新参数
+根据误差来计算各神经元的参数并更新。
+$$
+w_{ij}^{'} = w_{ij} + \eta\delta\sigma^{'}(a_j)z_i
+$$
+
+------
