@@ -1,5 +1,54 @@
 # 机器学习课程笔记
 
+## 目录
+
+- [导论](#导论)
+	- [分类](#分类)
+	- [数据集划分](#数据集划分)
+	- [过拟合和欠拟合](#过拟合和欠拟合)
+- [线性回归](#线性回归Linear-Regression)
+- [决策树](#决策树)
+- [贝叶斯分类](#贝叶斯分类)
+	- [贝叶斯定理](#贝叶斯定理Bayes-Rule)
+	- [极大似然估计](#极大似然估计Maximum-Likelihood-Estimation)
+	- [朴素贝叶斯分类器](#朴素贝叶斯分类器)
+- [K 近邻算法](#K近邻算法)
+	- [维度诅咒](#维度诅咒-the-curse-of-dimensionality) 
+- [逻辑回归](#逻辑回归（对数几率回归）logistics-regression)
+	- [感知机](#感知机-Perception)
+	- [逻辑回归](#逻辑回归)
+	- [Softmax 回归](#Softmax回归)
+- [支持向量机](#支持向量机Support-Vector-Machine)
+	- [线性 SVM](#线性SVM)
+	- [求解](#求解)
+	- [顺序最小优化 SMO](#顺序最⼩优化Sequential-minimal-optimization-(SMO))
+	- [非线性分类](#非线性分类)
+- [多层感知机](#多层感知机Multilayer-Perception)
+	- [激活函数](#激活函数)
+	- [BP 计算样例](#BP计算例子)
+- [词向量与语言模型](#词向量与语言模型Word-Embedding)
+	- [Counting based: the vector space model](#Counting-based:-the-vector-space-model)
+	- [Prediction based: word2vec](#Prediction-based:-word2vec)
+	- [Skip-Gram Model](#Skip-Gram-Model)
+- [深度学习](#深度学习Deep-Learning)
+- [循环神经网络](#循环神经网络Recurrent-Neural-Network)
+	- [LSTM](#LSTM)
+	- [Encoder & Decoder](#Encoder&Decoder)
+	- [注意力机制](#注意力机制Attention)
+	- [Transformer](#Transformer)
+	- [BERT](#BERT-Bidirectional-Encoder-Representation-from-Transformers)
+	- [预训练模型](#预训练模型Pretrained-Language-Models)
+- [卷积神经网络](#卷积神经网络Convolutional-Neural-Networks)
+- [无监督学习](#无监督学习Unsupervised-Learning)
+	- [K-means 聚类](#K-means聚类)
+	- [自动编码器](#自动编码器Auto-Encoder)
+	- [推荐系统](#推荐系统Recommend-System)
+		- [系统设计例题](#例题)
+- [强化学习](#强化学习)
+- [生成对抗网络](#生成对抗网络Generative-Adversarial-Networks（GAN）) 
+- [图神经网络](#图神经网络Graph-Neural-Networks) 
+
+
 ## 导论
 
 > 这一章知识点不难但很重要，关键要理解机器学习的概念、构成、工作流程、分类及一些常用概念如数据集、过拟合等。重点会考查同学们在实际应用中如何一步步构建一个机器学习系统。另外过拟合等概念也是考查重点。
@@ -48,7 +97,7 @@ A subset of artificial intelligence which uses **statistical methods (model)** t
 
 ![ml-procedure](./README/ml-procedure.png)
 
-**分类**
+### 分类
 
 - 监督学习：The learner is provided with a set of inputs together with the corresponding desired outputs.
 	- 分类问题（应用场景）
@@ -95,7 +144,7 @@ A subset of artificial intelligence which uses **statistical methods (model)** t
 
 There is no universally best model. Different types of models have to be developed to suit the nature of the data in real applications.
 
-**数据集划分**
+### 数据集划分
 
 - **保留法 (hold-out)**：按照 8-2、7-3、6-4、5-5 比例切分，**直接将数据随机划分为训练集和测试集**，然后使用训练集来生成模型，再用测试集来测试模型的正确率和误差，以验证模型的有效性。常见于决策树，朴素贝叶斯分类器、线性回归和逻辑回归等任务中。
 - **交叉验证法 (cross validation**：一般采用 **$k$ 折交叉验证**，即 _$k$-fold cross validation_，往往 $k$ 取 10。我们将数据集划分为 $k$ 个子集，每个子集均做一次测试集，每次将其余的作为训练集。在交叉验证时，我们重复训练 $k$ 次，每次选择一个子集作为测试集，并将 $k$ 次的平均交叉验证的正确率作为最终的结果。
@@ -250,7 +299,7 @@ $$
 \theta_{new} = \theta_{old} + \eta(y_i - f_\theta(x_i))x_i
 $$
 
-### 部分梯度下降法 Mini-Batch Gradient Descent
+#### 部分梯度下降法 Mini-Batch Gradient Descent
 
 每次梯度下降过程使用一个比较小的随机数据集，能够利用计算机对于矩阵求解的性能优化，从而加快计算效率。 
 
@@ -594,7 +643,7 @@ $$
 X_{norm} = \frac{x - x_{min}}{x_{max} - x_{min}}
 $$
 
-### 维度诅咒 - the curse of dimensionality
+### 维度诅咒 the curse of dimensionality
 
 增加 feature 可能会使得原来线性不可分的问题变得线性可分，但增加太多 feature 会造成过拟合，而且还会导致数据在高维度空间变得非常稀疏。
 
@@ -651,7 +700,7 @@ $$
 l(\vec{w}, w_0|x,r) = -rlogy - (1 - r)log(1 - y)
 $$
 
-### 感知机 - Perceptron
+### 感知机 Perceptron
 
 ![perceptron](./README/perceptron.png)
 
@@ -937,7 +986,7 @@ L(w, b, \alpha) &= \frac{1}{2}\|\sum^m_{i = 1}\alpha_iy^{(i)}x^{(i)}\|^2 - \sum^
 \end{align}
 $$
 
-### 顺序最小优化 - Sequential minimal optimization (SMO)
+### 顺序最小优化 Sequential minimal optimization (SMO)
 
 - Update two variable each time
 	- Loop until convergence
@@ -1524,7 +1573,7 @@ $$
 
 encoder-decoder 模型虽然非常经典，但是局限性也非常大。最大的局限性就在于编码和解码之间的唯一联系就是一个固定长度的语义向量 $C$。也就是说，编码器要将整个序列的信息压缩进一个固定长度的向量中去。但是这样做有两个弊端，一是语义向量无法完全表示整个序列的信息，还有就是先输入的内容携带的信息会被后输入的信息稀释掉，或者说，被覆盖了。输入序列越长，这个现象就越严重。这就使得在解码的时候一开始就没有获得输入序列足够的信息， 那么解码的准确度自然也就要打个折扣了。
 
-### 注意力机制 - Attension
+### 注意力机制 Attension
 
 相比于之前的 encoder-decoder 模型，attention模型最大的区别就在于它不在要求编码器将所有输入信息都编码进一个固定长度的向量之中。相反，此时编码器需要将输入编码成一个向量的序列，而在解码的时候，每一步都会选择性的从向量序列中挑选一个子集进行进一步处理。这样，在产生每一个输出的时候，都能够做到充分利用输入序列携带的信息。
 
@@ -1673,7 +1722,7 @@ $$
 5. 位置信息编码存在问题。在使用词向量的过程中，会做如下假设：对词向量做线性变换，其语义可以在很大程度上得以保留，也就是说词向量保存了词语的语言学信息（词性、语义）。然而，位置编码在语义空间中并不具有这种可变换性，它相当于人为设计的一种索引。那么，将这种位置编码与词向量相加，就是不合理的，所以不能很好地表征位置信息。
 6. 顶层梯度消失。
 
-### BERT - Bidirectional Encoder Representation from Transformers
+### BERT Bidirectional Encoder Representation from Transformers
 
 **预训练过程**
 
@@ -1716,7 +1765,7 @@ $$
 - 输入噪声 [MASK]，造成预训练-精调两阶段之间存在差异。
 - 无法处理文档级别的 NLP 任务，只适合于句子和段落级别的任务。
 
-### 预训练模型 - Pretrained Language Models
+### 预训练模型 Pretrained Language Models
 
 #### 关键技术
 
@@ -1745,7 +1794,7 @@ $$
 3. 从语言、多语言到多模态不断演进。
 
 
-## 卷积神经网络 - Convolutional Neural Networks
+## 卷积神经网络 Convolutional Neural Networks
 
 > 考察如何解决实际问题，设计题为主，同样会考察对 CNN 模型的理解以及重要的概念。
 
@@ -1839,7 +1888,7 @@ Number of Parameters: for each filter, $5 \times 5 \times 3 + 1 = 76$ (+1 for bi
 ![AlexNet-model](./README/AlexNet-model.png)
 
 
-## 无监督学习 - Unsupervised Learning
+## 无监督学习 Unsupervised Learning
 
 ### K-means 聚类
 
@@ -1933,7 +1982,7 @@ $$
 
 **将所有点的轮廓系数求平均，就是该聚类结果总的轮廓系数**。
 
-### 自动编码器 - Auto Encoder
+### 自动编码器 Auto Encoder
 
 ![auto-encoder](./README/auto-encoder.png)
 
@@ -1958,7 +2007,7 @@ $$
 **堆栈自动编码器**：本质就是 **增加中间特征层数** 。
 
 
-## 推荐系统 - Recommend System
+## 推荐系统 Recommend System
 
 * 搜索：有明确的搜索意图，搜索出来的结果和用户的搜索词相关。
 * 推荐：不具有目的性，依赖用户的历史行为和画像数据进行个性化推荐。
@@ -2146,7 +2195,7 @@ Model-Based 不仅如此，还可以通过“想象”来预判接下来将要�
 - Q-Learning
 
 
-## 生成对抗网络 - Generative Adversarial Networks（GAN）
+## 生成对抗网络 Generative Adversarial Networks（GAN）
 
 **囚徒困境（The prisoner's dilemma）**
 
@@ -2203,7 +2252,7 @@ Model-Based 不仅如此，还可以通过“想象”来预判接下来将要�
 在 2018 年，生成对抗网络进入了影像游戏改造社区。在旧影像游戏中，借由图像训练，以 4k 或更高分辨率重新创建低分辨率 2D 纹理，然后对它们进行下取样以适应游戏的原始分辨率（结果类似于抗锯齿的超级取样方法。通过适当的训练，生成对抗网络提供更清晰、高于原始的 2D 纹理图像品质，同时完全保留原始的细节、颜色。
 
 
-## 图神经网络 - Graph Neural Networks
+## 图神经网络 Graph Neural Networks
 
 GNN 是一种深度学习技术，可扩展的用于处理数据的现有神经网络图表。
 
