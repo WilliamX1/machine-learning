@@ -7,10 +7,16 @@
 	- [数据集划分](#数据集划分)
 	- [过拟合和欠拟合](#过拟合和欠拟合)
 	- [梯度爆炸和梯度消失](#梯度爆炸和梯度消失)
+	- [系统设计例题](#系统设计例题)
 - [线性回归](#线性回归-Linear-Regression)
 	- [代价函数](#代价函数-Cost-Function)
 	- [梯度下降法](#全量梯度下降法-batch-gradient-descent-bgd)
+		- [样例](#样例) 
 - [决策树](#决策树)
+	- [训练方法](#训练方法详解)
+		- [ID3](#id3)
+		- [CART](#cart)
+		- [C4.5](#c45) 
 	- [剪枝](#剪枝-pruning)
 	- [连续与缺失值](#连续与缺失值)
 	- [回归树](#回归树) 
@@ -18,7 +24,10 @@
 	- [贝叶斯定理](#贝叶斯定理-Bayes-Rule)
 	- [极大似然估计](#极大似然估计-Maximum-Likelihood-Estimation)
 	- [朴素贝叶斯分类器](#朴素贝叶斯分类器)
+		- [计算例子](#计算例子-1)
 	- [贝叶斯网络](#贝叶斯网络)
+		- [计算例子](#例子)
+	- [计算例子](#计算例子-2)  
 - [K 近邻算法](#K-近邻算法-KNN)
 	- [距离函数](#说明)
 	- [维度诅咒](#维度诅咒-the-curse-of-dimensionality) 
@@ -54,11 +63,13 @@
 	- [K-means 聚类](#K-means-聚类)
 	- [自动编码器](#自动编码器-Auto-Encoder)
 	- [推荐系统](#推荐系统-Recommend-System)
-		- [系统设计例题](#例题)
 - [强化学习](#强化学习)
 	- [Q-learning](#Q-Learning) 
 - [生成对抗网络](#生成对抗网络-generative-adversarial-networksgan) 
 - [图神经网络](#图神经网络-Graph-Neural-Networks) 
+
+
+<div STYLE="page-break-after: always;"></div>
 
 
 ## 导论
@@ -280,6 +291,20 @@ $$
 $$
 
 反向传播式子中有 w 的存在，所以 w 的大小影响了梯度的消失和爆炸，Batchnorm 就是通过对每一层的输出规范为均值和方差一致的方法，消除了 w 带来的放大缩小的影响，进而解决梯度消失和爆炸的问题。
+
+### 系统设计例题
+
+假设我们拿到了 10000 个不同用户的 Yelp 点评数据，经过处理后发现，这些点评记录的时间跨度为 2 年，每个用户都有 50 条店铺消费记录，依次按照时间顺序排列，每笔消费都写了评论并上传了图片。
+
+问题: 预测用户之后会去哪家店铺消费并为每个用户给
+出推荐店铺。
+
+1. **问题定义**: 该问题是 **序列建模问题**，假设我们要做到是用户的 next item prediction 即预测下一个可能去的店铺。
+2. **数据处理**: 训练集、验证集和测试集的划分。在这个问题中，假设我们将所有用户序列中的最后一个店铺作为测试集，序列中倒数第二个店铺作为验证集，其余的作为训练集。
+3. **特征嵌入**: 不同类型的特征如何嵌入。比如 numerical feature、categorical feature、图片、文本等各类特征。
+4. **模型选择**: 考虑需要使用的预测模型，比如 RNN、Transformer 等适合序列建模的模型。对模型的结构进行必要的说明和解释。可以包含具体的模块设计，重要参数的设置等。
+5. **模型训练**: 选用什么样的 Loss 和优化目标，比如这里我们会选用最小化 cross entropy loss。选用什么样的优化器和优化方法。是否做模型检验等。
+6. **模型评估和测试 （评价指标）**: 比如在这里我们选取 recall 和 precision 作为评价指标，对 top 5 的预测输出结果在测试集上进行评估，希望取得尽可能高的 recall 和 precision。
 
 
 ## 线性回归 Linear Regression
@@ -1491,7 +1516,7 @@ $$
 
 ![prediction-based-main](./README/prediction-based-main.png)
 
-**Use window and process for computing $P(w_t | w_{t + j})$
+**Use window and process for computing $P(w_t | w_{t + j})$**
 
 ![word2vec-eg](./README/word2vec-eg.png)
 
@@ -2446,20 +2471,6 @@ $$
 ![industrial-recommend-system](./README/industrial-recommend-system.png)
 
 ![industrial-recommend-system-layer](./README/industrial-recommend-system-layer.png)
-
-#### 例题
-
-假设我们拿到了 10000 个不同用户的 Yelp 点评数据，经过处理后发现，这些点评记录的时间跨度为 2 年，每个用户都有 50 条店铺消费记录，依次按照时间顺序排列，每笔消费都写了评论并上传了图片。
-
-问题: 预测用户之后会去哪家店铺消费并为每个用户给
-出推荐店铺。
-
-1. **问题定义**: 该问题是 **序列建模问题**，假设我们要做到是用户的 next item prediction 即预测下一个可能去的店铺。
-2. **数据处理**: 训练集、验证集和测试集的划分。在这个问题中，假设我们将所有用户序列中的最后一个店铺作为测试集，序列中倒数第二个店铺作为验证集，其余的作为训练集。
-3. **特征嵌入**: 不同类型的特征如何嵌入。比如 numerical feature、categorical feature、图片、文本等各类特征。
-4. **模型选择**: 考虑需要使用的预测模型，比如 RNN、Transformer 等适合序列建模的模型。对模型的结构进行必要的说明和解释。可以包含具体的模块设计，重要参数的设置等。
-5. **模型训练**: 选用什么样的 Loss 和优化目标，比如这里我们会选用最小化 cross entropy loss。选用什么样的优化器和优化方法。是否做模型检验等。
-6. **模型评估和测试 （评价指标）**: 比如在这里我们选取 recall 和 precision 作为评价指标，对 top 5 的预测输出结果在测试集上进行评估，希望取得尽可能高的 recall 和 precision。
 
 
 ## 强化学习
