@@ -1,0 +1,27 @@
+num_layers: 3
+data_path: /content/drive/MyDrive/AI-Poet
+pickle_path: tang.npz
+author: None
+constrain: None
+category: poet.tang
+lr: 0.001
+weight_decay: 0.0001
+use_gpu: 1
+epoch: 50
+batch_size: 16
+maxlen: 125
+plot_every: 200
+env: poetry
+max_gen_len: 200
+debug_file: /tmp/debugp
+model_path: 
+prefix_words: 仙路尽头谁为峰？一见无始道成空。
+start_words: 闲云潭影日悠悠
+acrostic: 0
+embedding_dim: 256
+hidden_dim: 512
+basic_dir: /content/drive/MyDrive/AI-Poet/Aftertrain-2
+model_prefix: /content/drive/MyDrive/AI-Poet/Aftertrain-2/tang_model
+metedata_path: /content/drive/MyDrive/AI-Poet/Aftertrain-2/metedata.txt
+result_path: /content/drive/MyDrive/AI-Poet/Aftertrain-2/result.txt
+usage_path: /content/drive/MyDrive/AI-Poet/Aftertrain-2/usage.txt
